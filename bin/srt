@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+const program = require('commander')
+const run = require('../main.js')
+
+program.option('-i, --input <input>', 'input video')
+
+program.parse(process.argv)
+
+const options = program.opts()
+
+run(options)

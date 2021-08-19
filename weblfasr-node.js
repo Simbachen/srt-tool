@@ -16,18 +16,18 @@ var rp = require('request-promise')
 var log = require('log4node')
 var fs = require('fs')
 var path = require('path')
-
+const config = require('./config.js')
 // 系统配置
-const config = {
-    // 请求地址
-    hostUrl: "http://raasr.xfyun.cn/api/",
-    // 在控制台-我的应用-语音转写获取
-    appId: "xxxxxxx",
-    // 在控制台-我的应用-语音转写获取
-    secretKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    // 音频文件地址
-    filePath: "xxxxxxxx"
-}
+// const config = {
+//     // 请求地址
+//     hostUrl: "http://raasr.xfyun.cn/api/",
+//     // 在控制台-我的应用-语音转写获取
+//     appId: "xxxxxxx",
+//     // 在控制台-我的应用-语音转写获取
+//     secretKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+//     // 音频文件地址
+//     filePath: "xxxxxxxx"
+// }
 
 // 请求的接口名
 const api = {
@@ -46,7 +46,7 @@ const FILE_PIECE_SICE = 10485760
 // 转写类型
 let lfasr_type = 0
 // 是否开启分词
-let has_participle = 'false'
+let has_participle = 'true'
 let has_seperate = 'true'
 // 多候选词个数
 let max_alternatives = 0
@@ -100,7 +100,9 @@ class RequestApi {
             paramDict = {
                 app_id: appId,
                 signa,
-                ts
+                ts,
+                has_participle,
+                
             }
 
         switch (apiName) {
@@ -157,7 +159,7 @@ class RequestApi {
             res = JSON.parse(res)
 
             if (res.ok == 0) {
-                log.info(apiName + ' success ' + JSON.stringify(res))
+                log.info(apiName + ' success ')
             } else {
                 log.error(apiName + ' error ' + JSON.stringify(res))
             }
@@ -247,12 +249,13 @@ class RequestApi {
     async getResultRequest(taskId) {
         let res = await this.geneRequest(api.getResult, this.geneParams(api.getResult, taskId))
 
-        let data = JSON.parse(res.data),
-            result = ''
-        data.forEach(val => {
-            result += val.onebest
-        })
-        log.info(result)
+        let data = JSON.parse(res.data)
+        //     result = ''
+        // data.forEach(val => {
+        //     result += val.onebest
+        // })
+        // log.info(result)
+        return data
     }
 
     async allApiRequest() {
@@ -262,12 +265,13 @@ class RequestApi {
             await this.uploadRequest(taskId, this.filePath, this.fileLen)
             await this.mergeRequest(taskId)
             await this.getProgressRequest(taskId)
-            await this.getResultRequest(taskId)
+            return await this.getResultRequest(taskId)
         } catch (err) {
             log.error(err)
         }
     }
 }
 
-let ra = new RequestApi(config)
-ra.allApiRequest()
+// let ra = new RequestApi(config)
+// ra.allApiRequest()
+module.exports = RequestApi
