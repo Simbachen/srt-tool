@@ -1,0 +1,17 @@
+{
+  "name": "srt-tool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "crypto-js": "^3.1.9-1",
+    "log4node": "^0.1.6",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5"
+  }
+}
