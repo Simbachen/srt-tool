@@ -28,5 +28,5 @@ const config = {
 
 ### Step 3. 进入视频目录，执行命令
 ```shell
-srt-tool -i xxx.mp4
+srt -i xxx.mp4
 ```
